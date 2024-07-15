@@ -38,7 +38,21 @@ service CatalogService @(path: 'CatalogService') {
     entity EmployeeSet as projection on master.employees;
     entity POs as projection on transaction.purchaseorder{
         *,
-        Items
+        Items,
+        case OVERALL_STATUS
+            when 'N' then 'New'
+            when 'P' then 'Pending'
+            when 'A' then 'Approved'
+            when 'X' then 'Rejected'
+            end as OverallStatus: String(20),
+        case OVERALL_STATUS
+            when 'N' then 2
+            when 'P' then 2
+            when 'X' then 1
+            when 'A' then 3
+             end as ColorCode: Integer,
+           
+
     }
     actions{
         action boost() returns POs
